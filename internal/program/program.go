@@ -55,6 +55,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
+	// Dynamically update help text based on toggled state
+	if m.help.ShowAll {
+		m.globalKeys.Help.SetHelp("?", "less")
+	} else {
+		m.globalKeys.Help.SetHelp("?", "more")
+	}
+
 	// Combine KeyMaps to show both Global and Stage-specific keys
 	combinedKeyMap := keymap.CombinedKeyMap{
 		Global: m.globalKeys,
