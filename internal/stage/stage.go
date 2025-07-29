@@ -1,7 +1,10 @@
 // Package stage defines the contract for a single application stage.
 package stage
 
-import tea "github.com/charmbracelet/bubbletea"
+import (
+	"github.com/charmbracelet/bubbles/help"
+	tea "github.com/charmbracelet/bubbletea"
+)
 
 // Stage is an interface that represents a single view or state
 // in the application.
@@ -15,4 +18,7 @@ type Stage interface {
 
 	// View renders the Stage's UI.
 	View() string
+
+	// KeyMap returns the Key Bindings for this Stage.
+	KeyMap() help.KeyMap
 }

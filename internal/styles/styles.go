@@ -3,13 +3,18 @@ package styles
 import "github.com/charmbracelet/lipgloss"
 
 var (
-	AppStyle = lipgloss.NewStyle().Padding(1, 2)
-
-	FocusedStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("202")).Bold(true)
-	BlurredStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
-	EnteredStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("255")).Bold(true)
-	WarningStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("196"))
-	SuccessStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("46"))
-	FailureStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("196"))
-	SpinnerStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
+	Focused = lipgloss.NewStyle().Foreground(lipgloss.Color("202")).Bold(true)
+	Blurred = lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
+	Entered = lipgloss.NewStyle().Foreground(lipgloss.Color("255")).Bold(true)
+	Warning = lipgloss.NewStyle().Foreground(lipgloss.Color("196"))
+	Success = lipgloss.NewStyle().Foreground(lipgloss.Color("46"))
+	Failure = lipgloss.NewStyle().Foreground(lipgloss.Color("196"))
+	Spinner = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
+	APadded = lipgloss.NewStyle().Padding(1)
+	HPadded = lipgloss.NewStyle().Padding(0, 1)
+	VPadded = lipgloss.NewStyle().Padding(1, 0)
+	AMargin = lipgloss.NewStyle().Margin(1)
+	HMargin = lipgloss.NewStyle().Margin(0, 1)
+	VMargin = lipgloss.NewStyle().Margin(1, 0)
+	Program = lipgloss.NewStyle().Padding(1, 0, 0, 1)
 )
