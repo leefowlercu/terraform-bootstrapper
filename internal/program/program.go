@@ -8,7 +8,7 @@ import (
 
 	"github.com/leefowlercu/terraform-bootstrapper/internal/keymap"
 	"github.com/leefowlercu/terraform-bootstrapper/internal/stage"
-	"github.com/leefowlercu/terraform-bootstrapper/internal/stages/selectprocess"
+	"github.com/leefowlercu/terraform-bootstrapper/internal/stages/selectworkflow"
 	"github.com/leefowlercu/terraform-bootstrapper/internal/styles"
 )
 
@@ -23,7 +23,7 @@ type model struct {
 func New() model {
 	return model{
 		globalKeys:   keymap.DefaultGlobalKeyMap,
-		currentStage: selectprocess.New(),
+		currentStage: selectworkflow.New(),
 		help:         help.New(),
 	}
 }

@@ -1,19 +1,19 @@
-package selectprocess
+package selectworkflow
 
 import (
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 )
 
-type selectProcessKeyMap struct {
+type selectWorkflowKeyMap struct {
 	Filter    key.Binding
 	GoToStart key.Binding
 	GoToEnd   key.Binding
 }
 
-var _ help.KeyMap = (*selectProcessKeyMap)(nil)
+var _ help.KeyMap = (*selectWorkflowKeyMap)(nil)
 
-var defaultSelectProcessKeyMap = selectProcessKeyMap{
+var defaultSelectWorkflowKeyMap = selectWorkflowKeyMap{
 	Filter: key.NewBinding(
 		key.WithKeys("/"),
 		key.WithHelp("/", "filter"),
@@ -28,11 +28,11 @@ var defaultSelectProcessKeyMap = selectProcessKeyMap{
 	),
 }
 
-func (k selectProcessKeyMap) ShortHelp() []key.Binding {
+func (k selectWorkflowKeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{k.Filter}
 }
 
-func (k selectProcessKeyMap) FullHelp() [][]key.Binding {
+func (k selectWorkflowKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{k.Filter, k.GoToStart, k.GoToEnd},
 	}

@@ -1,4 +1,4 @@
-package selectprocess
+package selectworkflow
 
 import (
 	"github.com/charmbracelet/bubbles/help"
@@ -11,15 +11,15 @@ import (
 
 // Define the Model for this Stage
 type model struct {
-	processList list.Model
-	stageKeys   selectProcessKeyMap
+	workflowList list.Model
+	stageKeys    selectWorkflowKeyMap
 }
 
 // Force implementation of Stage Interface
 var _ stage.Stage = (*model)(nil)
 
 // Creates and returns an initial Model for this Stage
-func New() stage.Stage {
+func New() *model {
 	createControlWorkspaceItem := process.New(
 		"create-control-workspace",
 		"Create Control Workspace",
@@ -27,15 +27,15 @@ func New() stage.Stage {
 	)
 
 	itemList := []list.Item{createControlWorkspaceItem}
-	processList := list.New(itemList, list.NewDefaultDelegate(), 80, 50)
-	processList.Title = "Select a Bootstrapping Process..."
-	processList.SetShowTitle(true)
-	processList.SetFilteringEnabled(true)
-	processList.SetShowHelp(false)
+	workflowList := list.New(itemList, list.NewDefaultDelegate(), 80, 50)
+	workflowList.Title = "Select a Bootstrapping Workflow..."
+	workflowList.SetShowTitle(true)
+	workflowList.SetFilteringEnabled(true)
+	workflowList.SetShowHelp(false)
 
-	return model{
-		processList: processList,
-		stageKeys:   defaultSelectProcessKeyMap,
+	return &model{
+		workflowList: workflowList,
+		stageKeys:    defaultSelectWorkflowKeyMap,
 	}
 }
 
@@ -46,16 +46,16 @@ func (m model) Init() tea.Cmd {
 func (m model) Update(msg tea.Msg) (stage.Stage, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		m.processList.SetSize(msg.Width, msg.Height-2)
+		m.workflowList.SetSize(msg.Width, msg.Height-2)
 	}
 
 	var cmd tea.Cmd
-	m.processList, cmd = m.processList.Update(msg)
+	m.workflowList, cmd = m.workflowList.Update(msg)
 	return m, cmd
 }
 
 func (m model) View() string {
-	return m.processList.View()
+	return m.workflowList.View()
 }
 
 func (m model) KeyMap() help.KeyMap {
