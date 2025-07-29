@@ -48,6 +48,7 @@ func (k GlobalKeyMap) ShortHelp() []key.Binding {
 
 func (k GlobalKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
-		{k.Up, k.Down, k.Select, k.Quit, k.Help},
+		{k.Up, k.Down, k.Select},
+		{k.Quit, k.Help},
 	}
 }

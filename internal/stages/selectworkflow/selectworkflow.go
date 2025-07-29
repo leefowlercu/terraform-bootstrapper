@@ -5,6 +5,7 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 
+	"github.com/leefowlercu/terraform-bootstrapper/internal/messages"
 	"github.com/leefowlercu/terraform-bootstrapper/internal/process"
 	"github.com/leefowlercu/terraform-bootstrapper/internal/stage"
 )
@@ -27,7 +28,9 @@ func New() *model {
 	)
 
 	itemList := []list.Item{createControlWorkspaceItem}
-	workflowList := list.New(itemList, list.NewDefaultDelegate(), 80, 50)
+
+	// Initialize with zero values, the AvailableSizeMsg will set the correct size.
+	workflowList := list.New(itemList, list.NewDefaultDelegate(), 0, 0)
 	workflowList.Title = "Select a Bootstrapping Workflow..."
 	workflowList.SetShowTitle(true)
 	workflowList.SetFilteringEnabled(true)
@@ -44,12 +47,17 @@ func (m model) Init() tea.Cmd {
 }
 
 func (m model) Update(msg tea.Msg) (stage.Stage, tea.Cmd) {
+	var cmd tea.Cmd
+
 	switch msg := msg.(type) {
+	case messages.AvailableSizeMsg:
+		m.workflowList.SetSize(msg.Width, msg.Height)
+		return m, nil
 	case tea.WindowSizeMsg:
-		m.workflowList.SetSize(msg.Width, msg.Height-2)
+		m.workflowList, cmd = m.workflowList.Update(msg)
+		return m, cmd
 	}
 
-	var cmd tea.Cmd
 	m.workflowList, cmd = m.workflowList.Update(msg)
 	return m, cmd
 }

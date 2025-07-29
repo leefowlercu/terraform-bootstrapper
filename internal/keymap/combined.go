@@ -6,7 +6,7 @@ import (
 )
 
 type CombinedKeyMap struct {
-	Global GlobalKeyMap
+	Global help.KeyMap
 	Stage  help.KeyMap
 }
 
