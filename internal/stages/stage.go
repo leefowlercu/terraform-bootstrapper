@@ -1,5 +1,4 @@
-// Package stage defines the contract for a single application stage.
-package stage
+package stages
 
 import (
 	"github.com/charmbracelet/bubbles/help"
@@ -13,12 +12,13 @@ type Stage interface {
 	Init() tea.Cmd
 
 	// Update is called when a message is received. It returns the next Stage to be rendered
-	// and a command. A stage can return itself to continue being displayed.
+	// and a command. A Stage can return itself to continue being displayed.
 	Update(msg tea.Msg) (Stage, tea.Cmd)
 
 	// View renders the Stage's UI.
 	View() string
 
-	// KeyMap returns the Key Bindings for this Stage.
-	KeyMap() help.KeyMap
+	// KeyMaps returns any Key Bindings for this Stage and, if applicable
+	// the KeyMap for the currently executing Workflow.
+	KeyMaps() (help.KeyMap, help.KeyMap)
 }

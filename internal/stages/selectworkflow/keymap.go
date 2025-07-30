@@ -6,6 +6,7 @@ import (
 )
 
 type selectWorkflowKeyMap struct {
+	Select    key.Binding
 	Filter    key.Binding
 	GoToStart key.Binding
 	GoToEnd   key.Binding
@@ -14,6 +15,10 @@ type selectWorkflowKeyMap struct {
 var _ help.KeyMap = (*selectWorkflowKeyMap)(nil)
 
 var defaultSelectWorkflowKeyMap = selectWorkflowKeyMap{
+	Select: key.NewBinding(
+		key.WithKeys("enter"),
+		key.WithHelp("enter", "select"),
+	),
 	Filter: key.NewBinding(
 		key.WithKeys("/"),
 		key.WithHelp("/", "filter"),
@@ -29,11 +34,11 @@ var defaultSelectWorkflowKeyMap = selectWorkflowKeyMap{
 }
 
 func (k selectWorkflowKeyMap) ShortHelp() []key.Binding {
-	return []key.Binding{k.Filter}
+	return []key.Binding{k.Select, k.Filter}
 }
 
 func (k selectWorkflowKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
-		{k.Filter, k.GoToStart, k.GoToEnd},
+		{k.Select, k.Filter, k.GoToStart, k.GoToEnd},
 	}
 }

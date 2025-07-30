@@ -8,15 +8,15 @@ import (
 
 	"github.com/leefowlercu/terraform-bootstrapper/internal/keymap"
 	"github.com/leefowlercu/terraform-bootstrapper/internal/messages"
-	"github.com/leefowlercu/terraform-bootstrapper/internal/stage"
+	"github.com/leefowlercu/terraform-bootstrapper/internal/stages"
 	"github.com/leefowlercu/terraform-bootstrapper/internal/stages/selectworkflow"
 	"github.com/leefowlercu/terraform-bootstrapper/internal/styles"
 )
 
 // Define the Model for the Program
 type model struct {
-	globalKeys   keymap.GlobalKeyMap
-	currentStage stage.Stage
+	keys         programKeyMap
+	currentStage stages.Stage
 	help         help.Model
 	viewWidth    int
 	viewHeight   int
@@ -25,7 +25,7 @@ type model struct {
 // Creates and returns an initial Model for the Program
 func New() *model {
 	return &model{
-		globalKeys:   keymap.DefaultGlobalKeyMap,
+		keys:         defaultProgramKeyMap,
 		currentStage: selectworkflow.New(),
 		help:         help.New(),
 	}
@@ -47,12 +47,19 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.currentStage, cmd = m.currentStage.Update(msg)
 		cmds = append(cmds, cmd, m.sendAvailableSizeCmd(msg.Width, msg.Height))
 
+	case messages.ChangeStageMsg:
+		// Switch the current Stage based on the message
+		m.currentStage = msg.Stage
+
+		// Initialize the new Stage and send a tea.Cmd to update the available size
+		cmds = append(cmds, m.currentStage.Init(), m.sendAvailableSizeCmd(m.viewWidth, m.viewHeight))
+
 	case tea.KeyMsg:
 		switch {
 		// Check for global keybindings
-		case key.Matches(msg, m.globalKeys.Quit):
+		case key.Matches(msg, m.keys.Quit):
 			return m, tea.Quit
-		case key.Matches(msg, m.globalKeys.Help):
+		case key.Matches(msg, m.keys.Help):
 			m.help.ShowAll = !m.help.ShowAll
 			cmds = append(cmds, m.sendAvailableSizeCmd(m.viewWidth, m.viewHeight))
 		default:
@@ -92,14 +99,18 @@ func (m model) sendAvailableSizeCmd(width, height int) tea.Cmd {
 func (m model) getCombinedKeyMap() help.KeyMap {
 	// Dynamically update help text based on toggled state
 	if m.help.ShowAll {
-		m.globalKeys.Help.SetHelp("?", "less")
+		m.keys.Help.SetHelp("?", "less")
 	} else {
-		m.globalKeys.Help.SetHelp("?", "more")
+		m.keys.Help.SetHelp("?", "more")
 	}
+
+	// Grab the KeyMaps from the current Stage and, if applicable, the Workflow
+	stageKeys, workflowKeys := m.currentStage.KeyMaps()
 
 	// Combine KeyMaps to show both Global and Stage-specific keys
 	return keymap.CombinedKeyMap{
-		Global: m.globalKeys,
-		Stage:  m.currentStage.KeyMap(),
+		Global:   m.keys,
+		Stage:    stageKeys,
+		Workflow: workflowKeys,
 	}
 }

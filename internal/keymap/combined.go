@@ -6,16 +6,31 @@ import (
 )
 
 type CombinedKeyMap struct {
-	Global help.KeyMap
-	Stage  help.KeyMap
+	Global   help.KeyMap
+	Stage    help.KeyMap
+	Workflow help.KeyMap
 }
 
 var _ help.KeyMap = (*CombinedKeyMap)(nil)
 
 func (c CombinedKeyMap) ShortHelp() []key.Binding {
-	return append(c.Global.ShortHelp(), c.Stage.ShortHelp()...)
+	combinedBindings := c.Global.ShortHelp()
+	if c.Stage != nil {
+		combinedBindings = append(combinedBindings, c.Stage.ShortHelp()...)
+	}
+	if c.Workflow != nil {
+		combinedBindings = append(combinedBindings, c.Workflow.ShortHelp()...)
+	}
+	return combinedBindings
 }
 
 func (c CombinedKeyMap) FullHelp() [][]key.Binding {
-	return append(c.Global.FullHelp(), c.Stage.FullHelp()...)
+	combinedBindings := c.Global.FullHelp()
+	if c.Stage != nil {
+		combinedBindings = append(combinedBindings, c.Stage.FullHelp()...)
+	}
+	if c.Workflow != nil {
+		combinedBindings = append(combinedBindings, c.Workflow.FullHelp()...)
+	}
+	return combinedBindings
 }
